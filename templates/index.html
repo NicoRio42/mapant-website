@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="wrapper">
+<nav>
+  <!--
+  <a href="/" class="active"><img src="{{ url_for('static', filename='logo.png') }}"></a>
+  -->
+  <a href="/"><img src="{{url_for('static', filename='logo.png')}}"></a>
+  <a href="/about/" class="right">About</a>
+</nav>
+  <div id="map">
+    <button id="exportButton" href=javascript:void(0) onclick="drawExportArea();">
+      EXPORT
+    </button>
+  </div>
+  </div>
+  <script>
+      var map = L.map('map').setView([-12.640338306846795, 45.263671875], 6);
+      // L.tileLayer('http://mapant.fr/tiles/{z}/{x}/{y}', {
+      L.tileLayer('http://localhost:8080/tiles/{z}/{x}/{y}', {
+        minZoom: 0,
+        maxZoom: 14,
+        tileSize: 256,
+        unloadInvisibleTiles: false,
+        continuousWorld: true,
+        tms: false,
+        attribution: '© OpenStreetMap contributors | IGN | Département de l’Ain',
+      }).addTo(map);
+
+      //editable layer for exporting tiles
+var editableLayers = new L.FeatureGroup();
+map.addLayer(editableLayers);
+
+L.drawLocal.draw.toolbar.buttons.rectangle = 'Draw Export Area';
+L.drawLocal.draw.toolbar.buttons.marker = 'Get Location in Google Maps';
+L.drawLocal.draw.handlers.rectangle.tooltip.end = 'Drag area to exports';
+L.drawLocal.draw.handlers.marker.tooltip.start = 'Select location';
+L.drawLocal.draw.handlers.simpleshape.tooltip.end = 'Drag area to export';
+
+
+
+var drawControl = new L.Control.Draw({
+	position: 'topleft',
+  draw: {
+    polygon: false,
+		circle: false,
+    marker: false,
+		polyline: false,
+		rectangle: false
+  },
+	edit: {
+    featureGroup: editableLayers,
+    edit: false,
+    remove: false
+  },
+	buttons: {
+    rectangle: 'Draw Export Area'
+  }
+});
+
+map.addControl(drawControl);
+
+function drawExportArea() {
+  //create a draw control
+  new L.Draw.Rectangle(map, drawControl.options.rectangle).enable()
+  //when draw control finishes, auto export.
+}
+
+
+map.on('draw:created', function(e) {
+  
+  var type = e.layerType,
+	layer = e.layer;
+  exLLs = layer.getLatLngs()[0];
+  let topLeft = [exLLs[0].lng, exLLs[2].lat];
+  let bottomRight = [exLLs[2].lng, exLLs[0].lat];
+  
+  if (Math.abs(lon2tile(topLeft[0], 12) - lon2tile(bottomRight[0], 12)) > 8 || Math.abs(lat2tile(topLeft[1], 12) - lat2tile(bottomRight[1], 12)) > 8) {
+    window.alert("The area is too large for an export.");
+  }
+  else if (type === 'rectangle') {
+    editableLayers.addLayer(layer);
+    editableLayers.eachLayer(function(layer) { editableLayers.removeLayer(layer);});
+
+    requestBody = {
+      topLeft: topLeft,
+      bottomRight: bottomRight
+    }
+
+    options = {
+      headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(requestBody)
+    }
+
+    // fetch('http://mapant.fr/export/', options)
+    fetch('http://localhost:8080/export/', options)
+    .then( res => res.blob() )
+    .then( blob => {
+      let link = document.createElement('a');
+      link.download = 'export.png';
+      link.href = window.URL.createObjectURL(blob);
+      link.click();
+      window.URL.revokeObjectURL(link.href);
+    });
+  }
+});
+
+function lon2tile(lon,zoom) { 
+  return (Math.floor((lon+180)/360*Math.pow(2,zoom)));
+}
+function lat2tile(lat,zoom) {
+  return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom)));
+}
+
+  </script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav style='height: 53px;'>
+  <!--
+  <a href="/" class="active"><img src="{{ url_for('static', filename='logo.png') }}"></a>
+  -->
+  <a href="/"><img src="{{url_for('static', filename='logo.png')}}"></a>
+  <a href="/about/" class="right">About</a>
+</nav>
+<div>
+  <section>
+    <h1>Français</h1>
+    <p>Inspiré par les projets <a href="http://mapant.fi">mapant.fi</a>, <a href="http://mapant.no">mapant.no</a>, <a href="http://omap.nz">omap.nz</a> et plus récemment <a href="http://mapant.es">mapant.es</a>, ce site web est une première tentative (à ma connaissance) pour générer automatiquement une carte de course d&#39;orientation à partir d&#39;une grande quantité de données LiDAR en France. Ce projet pilote a été réalisé avec les <a href="https://www.data.gouv.fr/fr/datasets/carroyage-des-dalles-des-points-lidar-2014-territoire-francais-grand-geneve/">données LiDAR du territoire français du Grand Genève</a> datant de 2014, et la base de données <a href="https://geoservices.ign.fr/documentation/diffusion/telechargement-donnees-libres.html#bd-topo">BD TOPO</a> de l&#39;<a href="https://www.ign.fr/">IGN</a>. Les données d&#39;<a href="https://www.openstreetmap.org">OpenStreetMap</a> ont aussi été utilisées pour la délimitation des zones résidentielles. Ce projet m&#39;a permis de me familiariser avec le processus de génération, avec en ligne de mire la <a href="https://www.ign.fr/institut/nos-activites/lidar-hd-une-couverture-nationale-dici-2025">couverture nationale d&#39;ici 2025</a>.</p>
+    <p>J&#39;ai utilisé la librairie <a href="https://rapidlasso.com/LAStools/">LAStools</a> de Martin Isenburg pour manipuler les fichiers LiDAR, et le génial logiciel <a href="http://www.routegadget.net/karttapullautin/">karttapullautin</a> de Jarkko Ryyppö pour la génération des cartes, le tout orchestré par des scripts écrits en Python pour automatiser le processus et générer la pyramide de tuiles.</p>
+    <p>Un grand merci à Olivier Blanc-Tranchant d&#39;avoir transformé sa chambre en centre de calcul pendant presque une semaine !</p>
+    <p>Coming soon :</p>
+    <ul>
+    <li>De nouvelles zones en Auvergne-Rhône-Alpes</li>
+    <li>Un post de blog un peu plus long expliquant les différentes étapes du projet</li>
+    <li>La publication du code sur github</li>
+    <li>La publication des tuiles en WMTS (Web Map Tile Service) projection WGS84, pour pouvoir superposer la carte sur un fond OpenStreetMap</li>
+    </ul>
+    <p>PS : Comme dit précédemment, il n&#39;y a pour l&#39;instant pas la possibilité de superposer la carte sur un fond OpenStreetMap. À vous de faire parler vos talents d&#39;orienteur en retouvant :</p>
+    <ul>
+    <li>Le Lac Léman</li>
+    <li>Les villes de Thonon-les-Bains, Annemasse, Bellegarde-sur-Valserine</li>
+    <li>Les domaines de ski de fond de La Vattay et Giron</li>
+    <li>La carte du col de la Faucille</li>
+    <li>Un bout de la carte de l&#39;Angoulot</li>
+    </ul>
+    <h1>English</h1>
+    <p>Inspired by <a href="http://mapant.fi">mapant.fi</a>, <a href="http://mapant.no">mapant.no</a>, <a href="http://omap.nz">omap.nz</a> and recently <a href="http://mapant.es">mapant.es</a>, this website is a first attempt (as far as I know) to generate an orienteering map from a large amount of LiDAR data in France. This pilot project was made with <a href="https://www.data.gouv.fr/fr/datasets/carroyage-des-dalles-des-points-lidar-2014-territoire-francais-grand-geneve/">territoire français du Grand Genève LiDAR data</a> from 2014, and the <a href="https://geoservices.ign.fr/documentation/diffusion/telechargement-donnees-libres.html#bd-topo">BD TOPO</a> database from the <a href="https://www.ign.fr/">French Geographic Institute</a>. I also used <a href="https://www.openstreetmap.org">OpenStreetMap</a> data for residential areas. This project was a way to get used with the generation process, while waiting for the <a href="https://www.ign.fr/institut/nos-activites/lidar-hd-une-couverture-nationale-dici-2025">full coverage of France</a> to come.</p>
+    <p>I used the <a href="https://rapidlasso.com/LAStools/">LAStools</a> library of Martin Isenburg to manipulate the LiDAR files, and the awesome <a href="http://www.routegadget.net/karttapullautin/">karttapullautin</a> software of Jarkko Ryyppö to generate the orienteering map. I wrote Python scripts to orchestrate the processes, and to generate the tile pyramid.</p>
+    <p>A big thank you to Olivier Blanc-Tranchant for turning his room into a computing center for almost a week.</p>
+    <p>Coming soon :</p>
+    <ul>
+    <li>New areas in Auvergne-Rhône-Alpes.</li>
+    <li>A longer blog post to explain the different steps of the project.</li>
+    <li>Code on github.</li>
+    <li>The publication of the tiles as a WMTS (Web Map Tile Service) in the WGS84 projection, to overlay the map on an OpenStreetMap layer.</li>
+    </ul>
+    <p style='color: grey; text-align: center; padding-top: 3em; font-size: 80%;'><a href="http://mapant.fr">Mapant.fr</a>, un projet de Nicolas Rio</p> 
+  </section>
+</div>
+</body>
+</html>
+{% endblock %}
