@@ -1,7 +1,6 @@
 venv
 __pycache__
 tiles
-app.py
 about.md
 mapant_no.html
 mapantNo.js
