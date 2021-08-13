@@ -9,3 +9,4 @@ old
 .vscode
 old
 log.md
+*.log
